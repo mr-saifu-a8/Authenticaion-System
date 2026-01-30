@@ -55,6 +55,7 @@ export default function Profile() {
   };
 
   if (loading) return <p>Loading profile...</p>;
+
   if (error)
     return (
       <div className="p-6">
@@ -68,10 +69,23 @@ export default function Profile() {
       </div>
     );
 
+  if (!user)
+    return (
+      <div className="p-6">
+        <p className="text-yellow-600">Profile not available.</p>
+        <button
+          onClick={() => navigate("/login")}
+          className="mt-4 bg-blue-600 text-white py-2 px-4 rounded"
+        >
+          Go to Login
+        </button>
+      </div>
+    );
+
   return (
     <div className="p-6">
-      <h2 className="text-xl">Welcome, {user.name}</h2>
-      <p>{user.email}</p>
+      <h2 className="text-xl">Welcome, {user?.name}</h2>
+      <p>{user?.email}</p>
 
       <button
         onClick={logout}

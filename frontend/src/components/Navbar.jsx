@@ -37,7 +37,20 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <h1 className="font-semibold">AuthApp</h1>
         {user && (
-          <span className="text-sm text-gray-300">Hello, {user.name}</span>
+          <div className="flex items-center gap-3">
+            {/* Avatar: first letter of email (or name) */}
+            <Link
+              to="/profile"
+              title={user.email || user.name}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-medium uppercase"
+            >
+              {(user.email || user.name || "U")[0]}
+            </Link>
+
+            <span className="text-sm text-gray-300">
+              Hello, {user.name || user.email}
+            </span>
+          </div>
         )}
       </div>
 
