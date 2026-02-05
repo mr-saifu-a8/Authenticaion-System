@@ -9,20 +9,34 @@ connectDB();
 
 app.use(express.json());
 
-// Enable CORS for the frontend dev server or configured origin
+// Enable CORS
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  }),
+);
 
+// API routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api", require("./routes/profileRoutes"));
 
-// Serve frontend when in production
+// Serve frontend in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+  const frontendPath = path.join(__dirname, "..", "frontend", "dist");
+  app.use(express.static(frontendPath));
+
+  // ✅ FIX: use middleware catch-all instead of "*"
+  app.use((req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
   });
 }
+
+// Fallback for non-production (optional but good practice)
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

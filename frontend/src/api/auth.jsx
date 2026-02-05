@@ -11,7 +11,7 @@ export const registerUser = async (data) => {
   return res.json();
 };
 
-export const loginUser = async (data) => {
+https: export const loginUser = async (data) => {
   const res = await fetch(`${AUTH_BASE}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
