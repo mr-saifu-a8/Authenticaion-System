@@ -22,7 +22,7 @@ export const protect = (req, res, next) => {
     req.user = decoded;
 
     // 🔹 Step 6: Sab sahi hai → next function call karo
-    next();
+    next(); 
   } catch (error) {
     // 🔹 Agar token invalid hai ya expire ho gaya
     return res.status(401).json({ message: "Invalid token" });
