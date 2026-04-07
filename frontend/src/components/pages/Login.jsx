@@ -1,56 +1,68 @@
-import React, { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await api.post("/auth/login", {email, password})
 
       const data = res.data;
 
       if (data.token) {
         localStorage.setItem("token", data.token);
-        alert("LoggedIn");
+        navigate("/profile");
       }
     } catch (error) {
-      console.log(error.message);
+      alert("server error");
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow">
-        <h2 className="mb-5 text-center text-lg font-medium text-gray-900">
-          Login
-        </h2>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-sm border border-gray-100 p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-800">Welcome back</h1>
+          <p className="text-sm text-gray-400 mt-1">Sign in to your account</p>
+        </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
-          />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">Email</label>
+            <input
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
-          />
+          <div className="space-y-1">
+            <label className="text-sm font-medium text-gray-600">
+              Password
+            </label>
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            />
+          </div>
 
           <button
             type="submit"
-            className="w-full rounded bg-gray-800 py-2 text-sm font-medium text-white hover:bg-gray-700"
+            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2.5 rounded-lg transition duration-200 active:scale-[0.98]"
           >
             Login
           </button>
